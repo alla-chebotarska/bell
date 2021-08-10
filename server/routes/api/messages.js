@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { Op } = require("sequelize");
 const { Conversation, Message } = require("../../db/models");
 const onlineUsers = require("../../onlineUsers");
 
@@ -38,6 +39,28 @@ router.post("/", async (req, res, next) => {
       conversationId: conversation.id,
     });
     res.json({ message, sender });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// expects array {messageIds} in body
+router.post("/markAsRead", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+    const { messageIds } = req.body;
+    if (messageIds) {
+      await Message.update({ isRead: true }, {
+        where: {
+          id: {
+            [Op.in]: messageIds
+          }
+        }
+      })
+    }
+    res.json();
   } catch (error) {
     next(error);
   }

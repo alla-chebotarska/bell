@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
     width: 13,
     borderRadius: "50%",
     border: "2px solid white",
-    backgroundColor: "#D0DAE9"
+    backgroundColor: "#D0DAE9",
   },
   online: {
     backgroundColor: "#1CED84"

@@ -1,10 +1,11 @@
 import axios from "axios";
 import socket from "../../socket";
 import {
-  gotConversations,
   addConversation,
+  gotConversations,
+  markMessagesAsRead,
   setNewMessage,
-  setSearchedUsers,
+  setSearchedUsers
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -117,3 +118,26 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
     console.error(error);
   }
 };
+
+const saveRead = async (body) => {
+  const { data } = await axios.post("/api/messages/markAsRead", body);
+  return data;
+};
+
+// message format to send: {messageIds}
+export const postRead = (conversation) => async (dispatch) => {
+  try {
+    await saveRead({
+      messageIds: getMessageIdsForCurrentUser(conversation)
+    });
+    dispatch(markMessagesAsRead(conversation));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getMessageIdsForCurrentUser = (conversation) => {
+  return conversation.messages
+    .filter(message => message.senderId === conversation.otherUser.id)
+    .map(message => message.id)
+}
