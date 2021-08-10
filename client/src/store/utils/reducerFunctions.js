@@ -1,3 +1,11 @@
+import moment from "moment";
+
+export const addWithSortedMassagesToStore = (conversations) => {
+  const compareMessages = (m1, m2) => moment(m1.createdAt) - moment(m2.createdAt);
+  conversations.forEach(conversation => conversation.messages.sort(compareMessages));
+  return conversations;
+}
+
 export const addMessageToStore = (state, payload) => {
   const { message, sender } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
