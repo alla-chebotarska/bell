@@ -3,6 +3,9 @@ import moment from "moment";
 export const AddSortedMessagesToStore = (conversations) => {
   const compareMessages = (m1, m2) => moment(m1.createdAt) - moment(m2.createdAt);
   conversations.forEach(conversation => conversation.messages.sort(compareMessages));
+  conversations.forEach(conversation => {
+    conversation.unreadMessagesCount = countUnreadMessages(conversation);
+  })
   return conversations;
 }
 
@@ -16,6 +19,7 @@ export const addMessageToStore = (state, payload) => {
       messages: [message],
     };
     newConvo.latestMessageText = message.text;
+    newConvo.unreadMessagesCount = countUnreadMessages(newConvo);
     return [newConvo, ...state];
   }
 
@@ -24,12 +28,23 @@ export const addMessageToStore = (state, payload) => {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
+      convoCopy.unreadMessagesCount = countUnreadMessages(convoCopy);
       return convoCopy;
     } else {
       return convo;
     }
   });
 };
+
+const countUnreadMessages = (conversation) => {
+  let count = 0;
+  conversation.messages.forEach(message => {
+    if (!message.isRead && message.senderId === conversation.otherUser.id) {
+      count++;
+    }
+  });
+  return count;
+}
 
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
@@ -88,3 +103,20 @@ export const addNewConvoToStore = (state, recipientId, message) => {
     }
   });
 };
+
+export const markMessagesAsReadInStore = (state, conversation) => {
+  return state.map((convo) => {
+    if (convo.id === conversation.id) {
+      const convoCopy = { ...convo }
+      convoCopy.messages.forEach(message => {
+        if (!message.isRead && message.senderId === convoCopy.otherUser.id) {
+          message.isRead = true;
+        }
+      });
+      convoCopy.unreadMessagesCount = countUnreadMessages(convoCopy);
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+}
