@@ -120,7 +120,7 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
 };
 
 const saveRead = async (body) => {
-  return await axios.post("/api/messages/markAsRead", body);
+  return await axios.patch("/api/messages/markAsRead", body);
 };
 
 // message format to send: {messageIds}
