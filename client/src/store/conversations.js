@@ -1,9 +1,9 @@
 import {
-  addMessageToStore, 
+  addMessageToStore,
   addNewConvoToStore,
   addOnlineUserToStore,
-  addSearchedUsersToStore, 
-  AddSortedMessagesToStore, 
+  addSearchedUsersToStore,
+  AddSortedMessagesToStore,
   markMessagesAsReadInStore,
   removeOfflineUserFromStore
 } from "./utils/reducerFunctions";
@@ -73,7 +73,7 @@ export const addConversation = (recipientId, newMessage) => {
 export const markMessagesAsRead = (conversation) => {
   return {
     type: MARK_MESSAGES_AS_READ,
-    conversation
+    payload: conversation,
   }
 }
 
@@ -102,12 +102,11 @@ const reducer = (state = [], action) => {
         action.payload.newMessage
       );
     case MARK_MESSAGES_AS_READ: {
-      return markMessagesAsReadInStore(state, action.conversation)
+      return markMessagesAsReadInStore(state, action.payload);
     }
     default:
       return state;
   }
 };
-
 
 export default reducer;

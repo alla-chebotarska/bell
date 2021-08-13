@@ -60,7 +60,7 @@ router.post("/markAsRead", async (req, res, next) => {
         }
       })
     }
-    res.json();
+    res.end();
   } catch (error) {
     next(error);
   }

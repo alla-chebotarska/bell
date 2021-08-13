@@ -39,7 +39,7 @@ export const addMessageToStore = (state, payload) => {
 const countUnreadMessages = (conversation) => {
   let count = 0;
   conversation.messages.forEach(message => {
-    if (message.isRead === false && message.senderId === conversation.otherUser.id) {
+    if (!message.isRead && message.senderId === conversation.otherUser.id) {
       count++;
     }
   });
@@ -109,7 +109,7 @@ export const markMessagesAsReadInStore = (state, conversation) => {
     if (convo.id === conversation.id) {
       const convoCopy = { ...convo }
       convoCopy.messages.forEach(message => {
-        if (message.isRead === false && message.senderId === convoCopy.otherUser.id) {
+        if (!message.isRead && message.senderId === convoCopy.otherUser.id) {
           message.isRead = true;
         }
       });

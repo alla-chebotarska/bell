@@ -15,17 +15,12 @@ const useStyles = makeStyles((theme) => ({
 
 const UnreadMessageNumber = (props) => {
     const classes = useStyles();
+    const { unreadMessagesCount } = props.conversation;
 
-    const { conversation } = props;
-    const { unreadMessagesCount } = conversation;
-
-    return (
-        <>
-            {unreadMessagesCount >= 1 ? <Box className={classes.readStatus}>
-                {unreadMessagesCount}
-            </Box> : ""}
-        </>
-    )
+    if (unreadMessagesCount >= 1) {
+        return <Box className={classes.readStatus}>{unreadMessagesCount}</Box>;
+    }
+    return null;
 }
 
 export default UnreadMessageNumber;
