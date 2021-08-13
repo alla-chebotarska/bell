@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 17,
         borderRadius: theme.spacing(2),
         padding: "4px 10px",
-        backgroundColor: "#3A8DFF",
+        backgroundColor: theme.palette.primary.main,
         color: "white",
     }
 }));
@@ -17,10 +17,11 @@ const UnreadMessageNumber = (props) => {
     const classes = useStyles();
     const { unreadMessagesCount } = props.conversation;
 
-    if (unreadMessagesCount >= 1) {
-        return <Box className={classes.readStatus}>{unreadMessagesCount}</Box>;
-    }
-    return null;
+    return (
+        <div>
+            {unreadMessagesCount > 0 && <Box className={classes.readStatus}>{unreadMessagesCount}</Box>}
+        </div>
+    );
 }
 
 export default UnreadMessageNumber;

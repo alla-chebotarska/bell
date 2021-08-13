@@ -45,7 +45,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // expects array {messageIds} in body
-router.post("/markAsRead", async (req, res, next) => {
+router.patch("/markAsRead", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
@@ -60,7 +60,7 @@ router.post("/markAsRead", async (req, res, next) => {
         }
       })
     }
-    res.end();
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }
